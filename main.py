@@ -12,17 +12,17 @@ def run():
     driver.get("https://www.facebook.com")
     print(driver.title)
     email = driver.find_element_by_id("email")
-    email.send_keys("mahadmunir10@gmail.com")
+    email.send_keys("gmail")
     print(email.text)
     password = driver.find_element_by_id("pass")
-    password.send_keys("mahadmuneer1456")
+    password.send_keys("password")
     password.send_keys(Keys.RETURN)
 
-    post = driver.find_element_by_class_name("a8c37x1j ni8dbmo4 stjgntxs l9j0dhe7")
     # post.send_keys("I am posting this on facebook")
     # post.send_keys(Keys.RETURN)
-    print(post)
-    driver.find_elements_by_xpath()
+    # print(post)
+    post2 = driver.find_elements_by_xpath("//span[@display='-webkit-box']")
+    print(post2)
 
 
 
