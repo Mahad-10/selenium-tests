@@ -1,5 +1,4 @@
 import time
-import unittest
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -35,8 +34,11 @@ class Mylistener(AbstractEventListener):
         print("before_change_value_of")
 
     def after_change_value_of(self, element, driver):
+        if element.text > '278500':
+            print("Pass")
+        if element.text > '278550':
+            print("Pass 2")
 
-        print("Value Changed")
 
 listener = Mylistener()
 
@@ -85,22 +87,16 @@ def twitterPost():
     button.click()
 
 
-class Test(unittest.TestCase):
-
-    def worldMeter(self):
-        driver = webdriver.Firefox()
-        edriver = EventFiringWebDriver(driver, Mylistener())
-        edriver.get("https://www.worldometers.info/world-population/")
-        time.sleep(5)
-        span = edriver.find_elements_by_xpath("//span[@rel='births_today']")
-        list = {264250, 265000, 264300}
-        if listener.after_change_value_of(span[0], edriver):
-            value = span[0].text
-            if value in list:
-                print(f"value in list {value}")
+def worldMeter():
+    driver = webdriver.Firefox()
+    edriver = EventFiringWebDriver(driver, Mylistener())
+    edriver.get("https://www.worldometers.info/world-population/")
+    time.sleep(5)
+    span = edriver.find_elements_by_xpath("//span[@rel='births_today']")
+    listener.after_change_value_of(span[0], edriver)
 
 
 if __name__ == '__main__':
-    unittest.main()
+    worldMeter()
 
 
