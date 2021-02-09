@@ -1,8 +1,45 @@
 import time
-
+import unittest
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
+
+
+class Mylistener(AbstractEventListener):
+    def before_navigate_to(self, url, driver):
+        print("before_navigate_to %s" % url)
+
+    def after_navigate_to(self, url, driver):
+        print("after_navigate_to %s" % url)
+
+    def before_click(self, element, driver):
+        print("before_click %s" % element)
+
+    def after_click(self, element, driver):
+        print("after_click %s" % element)
+
+    def after_navigate_forward(self, driver):
+        print("after_navigate_forward");
+
+    def before_navigate_forward(self, driver):
+        print("before_navigate_forward")
+
+    def after_navigate_back(self, driver):
+        print("after_navigate_back")
+
+    def before_navigate_back(self, driver):
+        print("before_navigate_back")
+
+    def before_change_value_of(self, element, driver):
+        print("before_change_value_of")
+
+    def after_change_value_of(self, element, driver):
+
+        print("Value Changed")
+
+listener = Mylistener()
+
 
 def twitterPost():
 
@@ -48,8 +85,22 @@ def twitterPost():
     button.click()
 
 
+class Test(unittest.TestCase):
+
+    def worldMeter(self):
+        driver = webdriver.Firefox()
+        edriver = EventFiringWebDriver(driver, Mylistener())
+        edriver.get("https://www.worldometers.info/world-population/")
+        time.sleep(5)
+        span = edriver.find_elements_by_xpath("//span[@rel='births_today']")
+        list = {264250, 265000, 264300}
+        if listener.after_change_value_of(span[0], edriver):
+            value = span[0].text
+            if value in list:
+                print(f"value in list {value}")
+
 
 if __name__ == '__main__':
-    twitterPost()
+    unittest.main()
 
 
