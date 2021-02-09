@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.keys import Keys
 
-def run():
+def twitterPost():
 
     # Facebook login
     # options = Options()
@@ -50,6 +50,6 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    twitterPost()
 
 
