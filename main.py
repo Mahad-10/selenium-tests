@@ -34,10 +34,7 @@ class Mylistener(AbstractEventListener):
         print("before_change_value_of")
 
     def after_change_value_of(self, element, driver):
-        if element.text > '278500':
-            print("Pass")
-        if element.text > '278550':
-            print("Pass 2")
+        print("Value Changed")
 
 
 listener = Mylistener()
@@ -92,8 +89,37 @@ def worldMeter():
     edriver = EventFiringWebDriver(driver, Mylistener())
     edriver.get("https://www.worldometers.info/world-population/")
     time.sleep(5)
-    span = edriver.find_elements_by_xpath("//span[@rel='births_today']")
-    listener.after_change_value_of(span[0], edriver)
+
+    # Get Births Today
+    birth_today = edriver.find_elements_by_xpath("//span[@rel='births_today']")
+    listener.after_change_value_of(birth_today[0], edriver)
+    print(f"Birth Today : {birth_today[0].text}")
+
+    # Get Births this Year
+    birth_year = edriver.find_elements_by_xpath("//span[@rel='births_this_year']")
+    listener.after_change_value_of(birth_year[0], edriver)
+    print(f"Birth this Year : {birth_year[0].text}")
+
+    # Get Deaths Today
+    death_today = edriver.find_elements_by_xpath("//span[@rel='dth1s_today']")
+    listener.after_change_value_of(death_today[0], edriver)
+    print(f"Death Today : {death_today[0].text}")
+
+    # Get Deaths this Year
+    death_year = edriver.find_elements_by_xpath("//span[@rel='dth1s_this_year']")
+    listener.after_change_value_of(death_year[0], edriver)
+    print(f"Death this Year : {death_year[0].text}")
+
+    # Get Population Growth Today
+    population_growth_today = edriver.find_elements_by_xpath("//span[@rel='absolute_growth']")
+    listener.after_change_value_of(population_growth_today[0], edriver)
+    print(f"Population Growth Today : {population_growth_today[0].text}")
+
+    # Get Population Growth this Year
+    population_growth_year = edriver.find_elements_by_xpath("//span[@rel='absolute_growth_year']")
+    listener.after_change_value_of(population_growth_year[0], edriver)
+    print(f"Population Growth this Year : {population_growth_year[0].text}")
+
 
 
 if __name__ == '__main__':
