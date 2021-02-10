@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
 
 
+# Listener class to listen to events
 class Mylistener(AbstractEventListener):
     def before_navigate_to(self, url, driver):
         print("before_navigate_to %s" % url)
@@ -50,10 +51,10 @@ def twitterPost():
     # driver.get("https://www.facebook.com")
     # print(driver.title)
     # email = driver.find_element_by_id("email")
-    # email.send_keys("mahadmunir10@gmail.com")
+    # email.send_keys("email")
     # print(email.text)
     # password = driver.find_element_by_id("pass")
-    # password.send_keys("mahadmuneer1456")
+    # password.send_keys("password")
     # password.send_keys(Keys.RETURN)
     #
     # # post.send_keys("I am posting this on facebook")
@@ -62,16 +63,16 @@ def twitterPost():
     # post = driver.find_element_by_xpath("/html/body/div[1]/div/div[1]/div/div[4]/div/div/div[1]/div/div[2]/div/div/div/form/div/div[1]/div/div/div[2]/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div/div/div/div")
     # print('post')
 
-    # Twitter login
-    options = Options()
 
+    # Twitter login and tweet
+    options = Options()
     driver = webdriver.Firefox(options=options)
     driver.get("https://twitter.com/login")
     time.sleep(5)
     email = driver.find_element_by_name("session[username_or_email]")
-    email.send_keys("03040072542")
+    email.send_keys("email")
     password = driver.find_element_by_name("session[password]")
-    password.send_keys("Maddy6234")
+    password.send_keys("password")
     password.send_keys(Keys.RETURN)
     time.sleep(5)
 
@@ -119,6 +120,13 @@ def worldMeter():
     population_growth_year = edriver.find_elements_by_xpath("//span[@rel='absolute_growth_year']")
     listener.after_change_value_of(population_growth_year[0], edriver)
     print(f"Population Growth this Year : {population_growth_year[0].text}")
+
+    for country in edriver.find_elements_by_class_name("t20-country"):
+        print(country.text)
+
+    print("OUT")
+
+
 
 
 
