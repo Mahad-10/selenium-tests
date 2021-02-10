@@ -1,9 +1,10 @@
 import time
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
+from multiprocessing import Process
 
 
 # Listener class to listen to events
@@ -42,7 +43,23 @@ class Mylistener(AbstractEventListener):
 listener = Mylistener()
 
 
-def twitterPost():
+# Driver for Chrome
+def createChromeDriver():
+    options = ChromeOptions()
+    options.add_argument("--headless")
+    driver = webdriver.Chrome(options=options)
+    return driver
+
+
+# Driver for Chrome
+def createFirefoxDriver():
+    options = FirefoxOptions()
+    options.add_argument("--headless")
+    driver = webdriver.Firefox(options=options)
+    return driver
+
+
+def twitterPost(driver):
     # Facebook login
     # options = Options()
     # # options.add_argument("--headless")
@@ -64,8 +81,6 @@ def twitterPost():
     # print('post')
 
     # Twitter login and tweet
-    options = Options()
-    driver = webdriver.Firefox(options=options)
     driver.get("https://twitter.com/login")
     time.sleep(5)
     email = driver.find_element_by_name("session[username_or_email]")
@@ -84,62 +99,16 @@ def twitterPost():
     button.click()
 
 
-def FirefoxWorldMeter():
-    options = Options()
-    options.add_argument("--headless")
-    driver = webdriver.Firefox(options=options)
-    edriver = EventFiringWebDriver(driver, Mylistener())
-    edriver.get("https://www.worldometers.info/world-population/")
-    time.sleep(5)
-
-    # Get Births Today
-    birth_today = edriver.find_elements_by_xpath("//span[@rel='births_today']")
-    listener.after_change_value_of(birth_today[0], edriver)
-    print(f"Birth Today : {birth_today[0].text}")
-
-    # Get Births this Year
-    birth_year = edriver.find_elements_by_xpath("//span[@rel='births_this_year']")
-    listener.after_change_value_of(birth_year[0], edriver)
-    print(f"Birth this Year : {birth_year[0].text}")
-
-    # Get Deaths Today
-    death_today = edriver.find_elements_by_xpath("//span[@rel='dth1s_today']")
-    listener.after_change_value_of(death_today[0], edriver)
-    print(f"Death Today : {death_today[0].text}")
-
-    # Get Deaths this Year
-    death_year = edriver.find_elements_by_xpath("//span[@rel='dth1s_this_year']")
-    listener.after_change_value_of(death_year[0], edriver)
-    print(f"Death this Year : {death_year[0].text}")
-
-    # Get Population Growth Today
-    population_growth_today = edriver.find_elements_by_xpath("//span[@rel='absolute_growth']")
-    listener.after_change_value_of(population_growth_today[0], edriver)
-    print(f"Population Growth Today : {population_growth_today[0].text}")
-
-    # Get Population Growth this Year
-    population_growth_year = edriver.find_elements_by_xpath("//span[@rel='absolute_growth_year']")
-    listener.after_change_value_of(population_growth_year[0], edriver)
-    print(f"Population Growth this Year : {population_growth_year[0].text}")
-
-    for country in edriver.find_elements_by_class_name("t20-country"):
-        print(country.text)
-
-    print("OUT")
-
-
 def test():
     driver = webdriver.Chrome()
     driver.get("https://www.facebook.com/")
 
 
-def ChromeWorldMeter():
-    options = Options()
-    options.add_argument("--headless")
-    driver = webdriver.Chrome(options=options)
+def worldPopulation(driver):
     edriver = EventFiringWebDriver(driver, Mylistener())
+
     edriver.get("https://www.worldometers.info/world-population/")
-    time.sleep(5)
+    time.sleep(3)
 
     # Get Births Today
     birth_today = edriver.find_elements_by_xpath("//span[@rel='births_today']")
@@ -174,8 +143,7 @@ def ChromeWorldMeter():
     for country in edriver.find_elements_by_class_name("t20-country"):
         print(country.text)
 
-    print("OUT")
-
 
 if __name__ == '__main__':
-    ChromeWorldMeter()
+    driver = createChromeDriver()
+    worldPopulation(driver)
