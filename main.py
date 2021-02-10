@@ -59,35 +59,25 @@ def createFirefoxDriver():
     return driver
 
 
-def twitterPost(driver):
-    # Facebook login
-    # options = Options()
-    # # options.add_argument("--headless")
-    #
-    # driver = webdriver.Firefox(options=options)
-    # driver.get("https://www.facebook.com")
-    # print(driver.title)
-    # email = driver.find_element_by_id("email")
-    # email.send_keys("email")
-    # print(email.text)
-    # password = driver.find_element_by_id("pass")
-    # password.send_keys("password")
-    # password.send_keys(Keys.RETURN)
-    #
-    # # post.send_keys("I am posting this on facebook")
-    # # post.send_keys(Keys.RETURN)
-    # # print(post)
-    # post = driver.find_element_by_xpath("/html/body/div[1]/div/div[1]/div/div[4]/div/div/div[1]/div/div[2]/div/div/div/form/div/div[1]/div/div/div[2]/div[1]/div[1]/div[1]/div/div/div/div/div[2]/div/div/div/div")
-    # print('post')
+# Facebook login
+def facebookLogin(driver, email, password):
+    driver.get("https://www.facebook.com")
+    emailInput = driver.find_element_by_id("email")
+    emailInput.send_keys(email)
+    passwordInput = driver.find_element_by_id("pass")
+    passwordInput.send_keys(password)
+    passwordInput.send_keys(Keys.RETURN)
 
-    # Twitter login and tweet
+
+# Twitter login and tweet
+def twitterPost(driver, email, password):
     driver.get("https://twitter.com/login")
     time.sleep(5)
-    email = driver.find_element_by_name("session[username_or_email]")
-    email.send_keys("email")
-    password = driver.find_element_by_name("session[password]")
-    password.send_keys("password")
-    password.send_keys(Keys.RETURN)
+    emailInput = driver.find_element_by_name("session[username_or_email]")
+    emailInput.send_keys(email)
+    passwordInput = driver.find_element_by_name("session[password]")
+    passwordInput.send_keys(password)
+    passwordInput.send_keys(Keys.RETURN)
     time.sleep(5)
 
     tweetBtn = driver.find_element_by_xpath("//a[@aria-label='Tweet']")
@@ -99,14 +89,9 @@ def twitterPost(driver):
     button.click()
 
 
-def test():
-    driver = webdriver.Chrome()
-    driver.get("https://www.facebook.com/")
-
-
+# Get World Population
 def worldPopulation(driver):
     edriver = EventFiringWebDriver(driver, Mylistener())
-
     edriver.get("https://www.worldometers.info/world-population/")
     time.sleep(3)
 
