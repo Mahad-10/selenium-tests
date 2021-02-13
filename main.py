@@ -4,7 +4,7 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.events import EventFiringWebDriver, AbstractEventListener
-from multiprocessing import Process
+from selenium.webdriver.common.action_chains import ActionChains
 
 
 # Listener class to listen to events
@@ -46,7 +46,7 @@ listener = Mylistener()
 # Driver for Chrome
 def createChromeDriver():
     options = ChromeOptions()
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     driver = webdriver.Chrome(options=options)
     return driver
 
@@ -67,6 +67,7 @@ def facebookLogin(driver, email, password):
     passwordInput = driver.find_element_by_id("pass")
     passwordInput.send_keys(password)
     passwordInput.send_keys(Keys.RETURN)
+    print("Facebook Login Successful")
 
 
 # Twitter login and tweet
@@ -93,7 +94,7 @@ def twitterPost(driver, email, password):
 def worldPopulation(driver):
     edriver = EventFiringWebDriver(driver, Mylistener())
     edriver.get("https://www.worldometers.info/world-population/")
-    time.sleep(3)
+
 
     # Get Births Today
     birth_today = edriver.find_elements_by_xpath("//span[@rel='births_today']")
@@ -128,7 +129,40 @@ def worldPopulation(driver):
     for country in edriver.find_elements_by_class_name("t20-country"):
         print(country.text)
 
+    worldPopulation(driver)
+
+driver = webdriver.Chrome()
+driver.get("https://orteil.dashnet.org/cookieclicker/")
+
+
+def cookieClick():
+    driver.implicitly_wait(5)
+    cookie = driver.find_element_by_id("bigCookie")
+    cookie_count = driver.find_element_by_id("cookies")
+    items = [driver.find_element_by_id("productPrice" + str(i)) for i in range(1, -1, -1)]
+
+    actions = ActionChains(driver)
+    actions.click(cookie)
+
+    for i in range(20):
+        actions.perform()
+        count = int(cookie_count.text.split(" ")[0])
+
+        for item in items:
+            value = int(item.text)
+
+            if value <= count:
+                upgrade_actions = ActionChains(driver)
+                upgrade_actions.move_to_element(item)
+                upgrade_actions.click()
+                upgrade_actions.perform()
+    cookieClick()
+
+    driver.quit()
+
 
 if __name__ == '__main__':
     driver = createChromeDriver()
     worldPopulation(driver)
+    driver.quit()
+    # cookieClick()
